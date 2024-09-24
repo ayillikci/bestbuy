@@ -16,7 +16,7 @@ class Product:
             """
             if not type(self) == int:
                 raise ValueError("Product quantity needs to be an integer number")
-            """"
+            """
             return self.quantity
 
         def set_quantity(self, quantity:int):
