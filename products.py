@@ -13,9 +13,23 @@ class Product:
         self.active = True
 
         def get_quantity(self):
+            if not type(self) == int:
+                raise ValueError("Product quantity needs to be an integer number")
             return self.quantity
 
-        def set_quantity(self, quantity):
+        def set_quantity(self, quantity:int):
+            if quantity < 0 :
+                raise ValueError("Product quantity can not be below 0")
 
+            self.quantity = quantity
+
+            if quantity == 0 :
+                self.deactive()
+
+        def activate(self):
+            self.active = True
+
+        def deactivate(self):
+            self.active = False
 
 
