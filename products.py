@@ -7,3 +7,15 @@ class Product:
         if quantity < 0 :
             raise ValueError("Product quantity cannot be negative.")
 
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+        self.active = True
+
+        def get_quantity(self):
+            return self.quantity
+
+        def set_quantity(self, quantity):
+
+
+
