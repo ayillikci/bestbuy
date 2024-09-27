@@ -1,6 +1,8 @@
 # Import the Product class from the products module
-from products import Product
+#from products import Product, NonStockedProduct, LimitedProduct
 from store import Store
+from promotions import Promotion, ThirdOneFree, PercentDiscount, SecondHalfPrice
+
 
 
 def run_store(store):
@@ -85,6 +87,8 @@ def main():
         Product("MacBook Air M2", price=1450, quantity=100),
         Product("Bose QuietComfort Earbuds", price=250, quantity=500),
         Product("Google Pixel 7", price=500, quantity=250),
+        NonStockedProduct("Windows License", price=125),
+        LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
     ]
 
     store = Store(product_list)
@@ -92,6 +96,23 @@ def main():
     # Start the interactive menu with run_store()
     run_store(store)
 
+ # Create promotion catalog
+    second_half_price = SecondHalfPrice("Second Half price!")
+    third_one_free = ThirdOneFree("Third One Free!")
+    thirty_percent = PercentDiscount("30% off!", percent=30)
+
+    # Add promotions to products
+    product_list[0].set_promotion(second_half_price)  # MacBook Air M2
+    product_list[1].set_promotion(third_one_free)     # Bose QuietComfort Earbuds
+    product_list[3].set_promotion(thirty_percent)     # Windows License
+
+# Example usage
+    print(product_list[0].show())  # Shows MacBook with second half price promotion
+    print(product_list[0].buy(3))  # Apply promotion to purchase 3 MacBook Air M2s
+    print(product_list[1].show())  # Shows Bose with third one free promotion
+    print(product_list[1].buy(3))  # Apply promotion to purchase 3 Bose earbuds
+    print(product_list[3].show())  # Shows Windows License with 30% off
+    print(product_list[3].buy(1))  # Apply promotion to purchase 1 Windows License
 
 if __name__ == "__main__":
     main()
