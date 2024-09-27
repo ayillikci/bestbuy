@@ -1,6 +1,7 @@
 # Import the Product class from the products module
 from products import Product, NonStockedProduct, LimitedProduct
 from store import Store
+from promotions import SecondHalfPrice, ThirdOneFree, PercentDiscount
 
 
 def run_store(store):
@@ -81,6 +82,7 @@ def make_order(store):
 
 
 def main():
+    # setup initial stock of inventory
     product_list = [
         Product("MacBook Air M2", price=1450, quantity=100),
         Product("Bose QuietComfort Earbuds", price=250, quantity=500),
@@ -89,11 +91,20 @@ def main():
         LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
     ]
 
-    store = Store(product_list)
+    # Create promotion catalog
+    second_half_price = SecondHalfPrice("Second Half Price!")
+    third_one_free = ThirdOneFree("Third One Free!")
+    thirty_percent = PercentDiscount("30% off!", percent=30)
 
-    # Start the interactive menu with run_store()
-    run_store(store)
+    # Add promotions to products
+    product_list[0].set_promotion(second_half_price)  # MacBook Air M2
+    product_list[1].set_promotion(third_one_free)  # Bose QuietComfort Earbuds
+    product_list[3].set_promotion(thirty_percent)  # Windows License
 
+    best_buy = Store(product_list)
+
+    # Start the interactive menu (replace run_store with your existing function)
+    run_store(best_buy)
 
 if __name__ == "__main__":
     main()

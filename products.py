@@ -6,6 +6,7 @@ class Product:
         self.price = price
         self.quantity = quantity
         self.active = True
+        self.promotion = None  # Add promotion support
 
     def get_quantity(self) -> int:
         return self.quantity
@@ -24,15 +25,26 @@ class Product:
     def deactivate(self):
         self.active = False
 
+    def set_promotion(self, promotion):
+        """Set a promotion for the product."""
+        self.promotion = promotion
+
     def show(self) -> str:
-        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
+        promo_info = f", Promotion: {self.promotion.name}" if self.promotion else ""
+        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}{promo_info}"
 
     def buy(self, quantity: int) -> float:
         if quantity <= 0 or quantity > self.quantity:
             raise ValueError("Invalid purchase quantity.")
-        total_price = self.price * quantity
+
+        if self.promotion:
+            total_price = self.promotion.apply_promotion(self, quantity)
+        else:
+            total_price = self.price * quantity
+
+        # Ensure total price is returned, and update quantity
         self.set_quantity(self.quantity - quantity)
-        return total_price
+        return total_price  # Make sure this returns the total price
 
 
 # New class for NonStockedProduct
