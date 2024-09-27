@@ -6,7 +6,6 @@ class Product:
         self.price = price
         self.quantity = quantity
         self.active = True
-        self.promotion = None  # Add promotion support
 
     def get_quantity(self) -> int:
         return self.quantity
@@ -25,47 +24,36 @@ class Product:
     def deactivate(self):
         self.active = False
 
-    def set_promotion(self, promotion):
-        """Set a promotion for the product."""
-        self.promotion = promotion
-
     def show(self) -> str:
-        promo_info = f", Promotion: {self.promotion.name}" if self.promotion else ""
-        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}{promo_info}"
+        return f"{self.name}, Price: {self.price}, Quantity: {self.quantity}"
 
     def buy(self, quantity: int) -> float:
         if quantity <= 0 or quantity > self.quantity:
             raise ValueError("Invalid purchase quantity.")
-
-        if self.promotion:
-            total_price = self.promotion.apply_promotion(self, quantity)
-        else:
-            total_price = self.price * quantity
-
+        total_price = self.price * quantity
         self.set_quantity(self.quantity - quantity)
         return total_price
 
 
+# New class for NonStockedProduct
 class NonStockedProduct(Product):
     def __init__(self, name: str, price: float):
+        # Always set quantity to 0 for non-stocked products
         super().__init__(name, price, 0)
 
     def set_quantity(self, quantity: int):
+        # Override to always keep quantity at 0
         self.quantity = 0
 
     def buy(self, quantity: int) -> float:
-        # Promotion support
-        if self.promotion:
-            total_price = self.promotion.apply_promotion(self, quantity)
-        else:
-            total_price = self.price * quantity  # No promotion, regular price
-        return total_price
+        # You can buy as many licenses as you want, but quantity doesn't change
+        return self.price * quantity
 
     def show(self) -> str:
-        promo_info = f", Promotion: {self.promotion.name}" if self.promotion else ""
-        return f"{self.name}, Price: {self.price}, Quantity: Unlimited (Non-Stocked){promo_info}"
+        return f"{self.name}, Price: {self.price}, Quantity: Unlimited (Non-Stocked)"
 
 
+# New class for LimitedProduct
 class LimitedProduct(Product):
     def __init__(self, name: str, price: float, quantity: int, maximum: int):
         super().__init__(name, price, quantity)
