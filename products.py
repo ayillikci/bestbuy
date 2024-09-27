@@ -42,30 +42,30 @@ class Product:
         else:
             total_price = self.price * quantity
 
-        # Ensure total price is returned, and update quantity
         self.set_quantity(self.quantity - quantity)
-        return total_price  # Make sure this returns the total price
+        return total_price
 
 
-# New class for NonStockedProduct
 class NonStockedProduct(Product):
     def __init__(self, name: str, price: float):
-        # Always set quantity to 0 for non-stocked products
         super().__init__(name, price, 0)
 
     def set_quantity(self, quantity: int):
-        # Override to always keep quantity at 0
         self.quantity = 0
 
     def buy(self, quantity: int) -> float:
-        # You can buy as many licenses as you want, but quantity doesn't change
-        return self.price * quantity
+        # Promotion support
+        if self.promotion:
+            total_price = self.promotion.apply_promotion(self, quantity)
+        else:
+            total_price = self.price * quantity  # No promotion, regular price
+        return total_price
 
     def show(self) -> str:
-        return f"{self.name}, Price: {self.price}, Quantity: Unlimited (Non-Stocked)"
+        promo_info = f", Promotion: {self.promotion.name}" if self.promotion else ""
+        return f"{self.name}, Price: {self.price}, Quantity: Unlimited (Non-Stocked){promo_info}"
 
 
-# New class for LimitedProduct
 class LimitedProduct(Product):
     def __init__(self, name: str, price: float, quantity: int, maximum: int):
         super().__init__(name, price, quantity)
